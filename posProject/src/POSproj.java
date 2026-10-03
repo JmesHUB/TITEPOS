@@ -3,7 +3,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
-public class POSproj1 {
+public class POSproj {
     
         ArrayList<ArrayList<MenuItem>> categories = new ArrayList<>();
         ArrayList<MenuItem> friedChickenMenu = new ArrayList<>();
