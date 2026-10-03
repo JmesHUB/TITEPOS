@@ -3,7 +3,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
-public class POSproj {
+public class POSproj1 {
     
         ArrayList<ArrayList<MenuItem>> categories = new ArrayList<>();
         ArrayList<MenuItem> friedChickenMenu = new ArrayList<>();
@@ -27,7 +27,7 @@ public class POSproj {
     
 
     public static void main(String[] args) throws Exception {
-        POSproj app = new POSproj();
+        POSproj1 app = new POSproj1();
         app.initializeMenu();
         app.dashBoard();
         
@@ -35,7 +35,7 @@ public class POSproj {
     public void header(){
         System.out.println("==================================================================================");
         System.out.println("|                                                                                |");
-        System.out.println("|                            LUNA & FAJARDO DINER                                |");
+        System.out.println("|                                   LUNA DINER                                   |");
         System.out.println("|                WELCOME TO THE BEST FRIED CHICKEN PLACE IN TOWN!                |");
         System.out.println("|                                                                                |");
         System.out.println("==================================================================================");
@@ -51,13 +51,12 @@ public class POSproj {
 
             System.out.println("\n=========================================================================================");
             System.out.println("| [1][ FRIED CHICKEN MENU ] [2][ GROUP BUNDLES ] [3][ SIDES MENU ] [4][ DESSERTS MENU ] |");
-            System.out.println("| [5][ BEVERAGE MENU ]      [6][ CART ]          [7][ TRANSACTION HISTORY ]             |");
+            System.out.println("| [5][ BEVERAGE MENU ]      [6][ CART ]          [7][ HISTORY ]    [8][ ADMIN PANEL]    |");
             System.out.println("=========================================================================================");
 
             a = 1;
             startMenu();
         }
-        
         
     }
     public void initializeMenu(){
@@ -68,11 +67,11 @@ public class POSproj {
         categories.add(dessertsMenu);
         categories.add(beverageMenu);
 
+        drinks.add(new MenuItem("COKE ", 0, 0, false));
         drinks.add(new MenuItem("COKE ZERO", 0, 0, false));
-        drinks.add(new MenuItem("COKE", 0, 0, false));
-        drinks.add(new MenuItem("COKE PRO MAX", 0, 0, false));
+        drinks.add(new MenuItem("ICED TEA", 0, 0, false));
         drinks.add(new MenuItem("PINEAPPLE JUICE", 0, 0, false));
-        drinks.add(new MenuItem("JIMMY'S LAMBANOG", 0, 0, false));
+        drinks.add(new MenuItem("COKE FLOAT [ + PHP 15 ]", 15, 0, false));
 
         friedChickenMenu.add(new MenuItem("1 PC CHICKEN ALA CARTE", 99, 100, false));
         friedChickenMenu.add(new MenuItem("1 PC CHICKEN W/ DRINKS", 119, 100, true, 1));
@@ -132,7 +131,6 @@ if (category == 5) {
                         "| |    |   --|     |    -| | |    |   __| | | |   __| | | |_   _|  |__|    | |\r\n" + //
                         "| |_   |_____|__|__|__|__| |_|    |_____|_|_|_|__|    |_|   |_|    |__|   _| |\r\n" + //
                         "|___|                                                                    |___|");
-                        sc.nextLine();
                         System.out.println("[ CLICK ANYWHERE TO EXIT ! ]");
                         sc.nextLine();
     }else{
@@ -142,14 +140,18 @@ if (category == 5) {
 } else if (category == 6) {
     transHist();
     return;
-} else if (category < 0 || category >= categories.size()) {
+}else if(category == 7){
+    adminPanel();
+    return;
+} else if (category >= 0 && category < categories.size()) {
+} else {
     return;
 }
 
         System.out.println("==========[ MENU ]===============================[ PRICE ]=[ STOCK ]=========");
 
         ArrayList<MenuItem> selectedCategory = categories.get(category);
-        for(POSproj.MenuItem item : selectedCategory){
+        for(POSproj1.MenuItem item : selectedCategory){
             System.out.printf(
                 "|  [%d] %-40s - PHP %-7.2f x%-1d LEFT%n",
                 a++,
@@ -188,7 +190,7 @@ if (category == 5) {
 
                 a = 1;
 
-                for(POSproj.MenuItem drink : drinks){
+                for(POSproj1.MenuItem drink : drinks){
                     System.out.printf(
                         "[%d] %-40s%n",
                         a++,
@@ -207,6 +209,7 @@ if (category == 5) {
                     return;
                 }else{
                     System.out.println("! ENTER VALID NUMBER !");
+                    sc.nextLine();
                 }
             }
         }
@@ -226,6 +229,15 @@ if (category == 5) {
                     showCart();
                     
        
+    }
+    public void adminPanel(){
+        System.out.println("====[ ENTER ADMIN PIN ]=====");
+        int pin = 0;
+        try {
+            pin = sc.nextInt();
+        } catch (InputMismatchException e) {
+        }
+        System.out.println(pin);
     }
     
     public void showCart(){
@@ -261,10 +273,22 @@ if (category == 5) {
                 voidMethod();
                 break;
             case 4: 
-            cart.clear();
+            cancel();
+            
             break;
         }
 
+    }
+    public void cancel(){
+        
+        for (ArrayList<MenuItem> cancelItem : cart) {
+            for (MenuItem cancelItem1 : cancelItem) {
+                cancelItem1.stock++;
+                
+            }
+            
+        }
+        cart.clear();
     }
     public void voidMethod(){
     System.out.println("[ SELECT ITEM TO VOID ! ]\n[" + (cart.size() + 1) + "][ RETURN TO MENU ]");
@@ -301,7 +325,7 @@ if (category == 5) {
         System.out.println("[ ENTER AMOUNT : ]");
         System.out.println("[1][ RETURN TO MENU ]");
         cash = change();
-        if(cash>totalPrice){
+        if(cash>=totalPrice){
             System.out.println("==============================[ THANKYOU FOR YOUR PURCHASE ]====================================");
             System.out.println("  ___ _   _ ___  ___ _  _   _   ___ ___   ___ _   _  ___ ___ ___ ___ ___ ___ _   _ _      _ \r\n" + //
                                 " | _ \\ | | | _ \\/ __| || | /_\\ / __| __| / __| | | |/ __/ __| __/ __/ __| __| | | | |    | |\r\n" + //
@@ -329,7 +353,6 @@ public void transHist() {
         System.out.println("\n[ NO TRANSACTION HISTORY AVAILABLE ]\n");
         System.out.println("[ PRESS ENTER TO RETURN ]");
         sc.nextLine();
-        sc.nextLine();
         return;
     }
     int transActCounter = 1;
@@ -356,7 +379,6 @@ public void transHist() {
     }
 
     System.out.println("[ PRESS ENTER TO RETURN TO MAIN MENU ]");
-    sc.nextLine();
     sc.nextLine();
 }
     public double change(){
@@ -396,27 +418,29 @@ public void transHist() {
         }
     }
 
-    public int category(){
-        int catSize = displayMenu().size();
-        int categoryIndex = 0;
+  public int category(){
+    int catSize = displayMenu().size();
+    int categoryIndex = 0;
 
+    while(true){
         try{
             categoryIndex = sc.nextInt();
+            sc.nextLine();
+
+            if(categoryIndex >= 1 && categoryIndex <= catSize+3){
+                return categoryIndex;
+            }else{
+                System.out.println("! ENTER VALID NUMBER !");
+            }
+
         }catch(InputMismatchException e){
             sc.next();
-            return 0;
-        }
-
-        if(categoryIndex >= 1 && categoryIndex <= catSize+2){
-            return categoryIndex;
-        }else{
-            return 0;
+            System.out.println("! ENTER VALID NUMBER !");
         }
     }
-
+}
     public int itemChoiceIndex(int menuSize){
         int itemIndex = 0;
-
         try{
             itemIndex = sc.nextInt();
         }catch(InputMismatchException e){
@@ -437,6 +461,7 @@ public void transHist() {
         int stock;
         boolean hasDrinks;
         int drinkQuan;
+        boolean available = true;
 
         MenuItem(
             String name,
@@ -450,6 +475,7 @@ public void transHist() {
             this.stock = stock;
             this.hasDrinks = hasDrinks;
             this.drinkQuan = drinkQuan;
+            this.available = true;
         }
 
         MenuItem(
@@ -463,6 +489,7 @@ public void transHist() {
             this.stock = stock;
             this.hasDrinks = hasDrinks;
             this.drinkQuan = 0;
+            this.available = true;
         }
     }
     class Transaction {
@@ -470,7 +497,6 @@ public void transHist() {
     double cashPaid;
 
     Transaction(ArrayList<ArrayList<MenuItem>> orders, double cashPaid) {
-        // Create a deep/new copy of the cart list
         this.orders = new ArrayList<>(orders); 
         this.cashPaid = cashPaid;
     }
